@@ -11,7 +11,7 @@ public class UpdateSecurePassword {
 
     /*
      * 
-     * This program updates your existing moviedb customers table to change the
+     * This program updates your existing moviedb employees table to change the
      * plain text passwords to encrypted passwords.
      * 
      * You should only run this program **once**, because this program uses the
@@ -30,13 +30,13 @@ public class UpdateSecurePassword {
         Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
         Statement statement = connection.createStatement();
 
-        // change the customers table password column from VARCHAR(20) to VARCHAR(128)
-        String alterQuery = "ALTER TABLE customers MODIFY COLUMN password VARCHAR(128)";
+        // change the employees table password column from VARCHAR(20) to VARCHAR(128)
+        String alterQuery = "ALTER TABLE employees MODIFY COLUMN password VARCHAR(128)";
         int alterResult = statement.executeUpdate(alterQuery);
-        System.out.println("altering customers table schema completed, " + alterResult + " rows affected");
+        System.out.println("altering employees table schema completed, " + alterResult + " rows affected");
 
         // get the ID and password for each customer
-        String query = "SELECT id, password from customers";
+        String query = "SELECT email, password from employees";
 
         ResultSet rs = statement.executeQuery(query);
 
@@ -49,14 +49,14 @@ public class UpdateSecurePassword {
         System.out.println("encrypting password (this might take a while)");
         while (rs.next()) {
             // get the ID and plain text password from current table
-            String id = rs.getString("id");
+            String id = rs.getString("email");
             String password = rs.getString("password");
             
             // encrypt the password using StrongPasswordEncryptor
             String encryptedPassword = passwordEncryptor.encryptPassword(password);
 
             // generate the update query
-            String updateQuery = String.format("UPDATE customers SET password='%s' WHERE id='%s';", encryptedPassword,
+            String updateQuery = String.format("UPDATE employees SET password='%s' WHERE email='%s';", encryptedPassword,
                     id);
             updateQueryList.add(updateQuery);
         }
