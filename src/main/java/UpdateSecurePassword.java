@@ -36,7 +36,7 @@ public class UpdateSecurePassword {
         System.out.println("altering customers table schema completed, " + alterResult + " rows affected");
 
         // get the ID and password for each customer
-        String query = "SELECT email, password from employess";
+        String query = "SELECT email, password from employees";
 
         ResultSet rs = statement.executeQuery(query);
 
